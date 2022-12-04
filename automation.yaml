@@ -1,0 +1,13 @@
+alias: Kanda no data notification
+description: ""
+trigger:
+  - platform: template
+    value_template: >-
+      {{ now() - states.sensor.kanda_temperature.last_changed >= timedelta
+      (minutes=60) }}
+action:
+  - service: notify.mobile_app_iphone_van_arco
+    data:
+      data: {}
+      title: Kanda
+      message: "No data recieved from the weather station for 60 minuts!"
