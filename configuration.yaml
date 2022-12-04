@@ -1,0 +1,52 @@
+sensor:
+  - platform: rest
+    name: "kanda_sensor"
+    resource: https://api.kandaweather.net/v1/chain/get_table_rows
+    headers:
+      accept: "*/*"
+      Content-Type: application/json
+    payload: '{ "code" : "ascendweathr","table" : "weather","scope" : "ascendweathr","index_position" : "first","key_type" : "name","lower_bound" : "adckd43evatj","limit" : "1","json" : "true" }'
+    scan_interval: 900
+    value_template: "{{ value_json.value }}"
+    json_attributes_path: $.rows[0]
+    json_attributes:
+      - devname
+      - pressure_hpa
+      - temperature_c
+      - humidity_percent  
+      - dew_point
+
+  - platform: template
+    sensors:
+      kanda_temperature:
+        value_template: "{{ state_attr('sensor.kanda_sensor', 'temperature_c')}}"
+        device_class: temperature
+        unit_of_measurement: "°C"
+
+  - platform: template
+    sensors:
+      kanda_dew_point:
+        value_template: "{{ state_attr('sensor.kanda_sensor', 'dew_point')}}"
+        device_class: temperature
+        unit_of_measurement: "°C"
+
+  - platform: template
+    sensors:
+      kanda_pressure_hpa:
+        value_template: "{{ state_attr('sensor.kanda_sensor', 'pressure_hpa')}}"
+        device_class: pressure
+        unit_of_measurement: "°hPa"
+        
+  - platform: template
+    sensors:
+      kanda_humidity:
+        value_template: "{{ state_attr('sensor.kanda_sensor', 'humidity_percent')}}"
+        device_class: humidity
+        unit_of_measurement: "°%"
+        
+  - platform: template
+    sensors:
+      kanda_dewpoint_depression:
+        value_template: "{{ states('sensor.kanda_temperature') |float - states('sensor.kanda_dew_point') | float }}"
+        device_class: temperature
+        unit_of_measurement: "°C"
