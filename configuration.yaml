@@ -5,7 +5,7 @@ sensor:
     headers:
       accept: "*/*"
       Content-Type: application/json
-    payload: '{ "code" : "ascendweathr","table" : "weather","scope" : "ascendweathr","index_position" : "first","key_type" : "name","lower_bound" : "adckd43evatj","limit" : "1","json" : "true" }'
+    payload: '{ "code" : "ascendweathr","table" : "weather","scope" : "ascendweathr","index_position" : "first","key_type" : "name","lower_bound" : "<<DEVICEID>>","limit" : "1","json" : "true" }'
     scan_interval: 900
     value_template: "{{ value_json.value }}"
     json_attributes_path: $.rows[0]
